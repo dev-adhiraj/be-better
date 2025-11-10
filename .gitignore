@@ -1,0 +1,62 @@
+# Node dependencies
+node_modules/
+
+# Build outputs
+/dist/
+/build/
+/.vite/
+.vite/deps/
+.vite-cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# IDE project files
+.vscode/
+.idea/
+*.iml
+
+# Test coverage
+coverage/
+
+# Local Firebase/Emulators (if any)
+.firebase/
+.firebaserc.local
+
+# Misc caches
+.cache/
+.eslintcache
+.stylelintcache
+.parcel-cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Storybook
+storybook-static/
+
+# Docker
+*.pid
+
+# Optional lock files to ignore if not used
+# Uncomment as needed
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
