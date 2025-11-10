@@ -1,0 +1,48 @@
+{
+  "name": "Apollo Wallet",
+  "version": "1.0.0",
+  "description": "Apollo Wallet - Your Key to the Decentralized World",
+  "manifest_version": 3,
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open Apollo Wallet"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "webNavigation",
+    "windows"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "inject.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
