@@ -39,7 +39,15 @@ function RecoverAccount({ setWalletAddress, setSeedPhrase }) {
       setLoading(true)
       await initializeChainsDb().then(() => { setLoading(false) })
       setWalletAddress(firstAccount.address);
-      navigate("/");
+
+      // Update user data with wallet address
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      if (userData.email) {
+        userData.walletAddress = firstAccount.address;
+        localStorage.setItem('userData', JSON.stringify(userData));
+      }
+
+      navigate("/home/dashboard");
     } catch (error) {
       console.error("Error recovering wallet:", error);
       setError("An error occurred while recovering the wallet.");

@@ -27,13 +27,20 @@ function CreateAccount({ setWalletAddress, setSeedPhrase }) {
       setSeedPhrase(decryptedMnemonic);
       const count = await countAccounts();
       const firstAccount = ethers.Wallet.fromMnemonic(decryptedMnemonic, `m/44'/60'/0'/0/0`);
-      createAccountEntry(firstAccount.address, `Account3 ${count + 1}`, encryptData(firstAccount.privateKey));
+      createAccountEntry(firstAccount.address, `Account ${count + 1}`, encryptData(firstAccount.privateKey));
       setLoading(true)
       await initializeChainsDb().then(() => { setLoading(false) })
       setWalletAddress(firstAccount.address);
       setChildCount(encryptData("1"));
-      setWalletAddress(firstAccount.address);
-      navigate("/");
+
+      // Update user data with wallet address
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      if (userData.email) {
+        userData.walletAddress = firstAccount.address;
+        localStorage.setItem('userData', JSON.stringify(userData));
+      }
+
+      navigate("/home/dashboard");
     } catch (error) {
       console.error("Error decrypting mnemonic:", error);
     }

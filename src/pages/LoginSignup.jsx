@@ -78,18 +78,28 @@ const LoginSignup = ({ onLoginSuccess }) => {
 
       if (!res.ok || data.error) throw new Error(data.error || "Login failed");
 
-      const userData = {
-        name: data.name,
-        email: data.email,
-        walletAddress: "Not connected",
-        membershipPlan: null,
-        membershipActive: true
+      // Fetch complete user data from API
+      const userRes = await fetch(`${API_BASE}/get_user.php?email=${encodeURIComponent(data.email)}`);
+      const userData = await userRes.json();
+
+      if (!userRes.ok || userData.error) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const apiUser = userData.user;
+      const completeUserData = {
+        name: apiUser.name,
+        email: apiUser.email,
+        walletAddress: apiUser.wallet_address || "Not connected",
+        membershipPlan: apiUser.plan,
+        membershipActive: apiUser.membership_active == 1
       };
-      localStorage.setItem("userData", JSON.stringify(userData));
+
+      localStorage.setItem("userData", JSON.stringify(completeUserData));
       localStorage.setItem("auth_token", data.token);
 
       if (onLoginSuccess) {
-        onLoginSuccess(userData.walletAddress, "");
+        onLoginSuccess(completeUserData.walletAddress, "");
       }
 
       message.success(`Welcome, ${data.name}!`);
@@ -164,12 +174,17 @@ const handleRegister = async () => {
 
         if (!loginRes.ok || loginData.error) throw new Error("Auto login failed");
 
+        // Fetch complete user data from API
+        const userRes = await fetch(`${API_BASE}/get_user.php?email=${encodeURIComponent(email)}`);
+        const userDataResponse = await userRes.json();
+
+        const apiUser = userDataResponse.user;
         const userData = {
-          name: loginData.name,
-          email: loginData.email,
-          walletAddress: walletData.address,
-          membershipPlan: null,
-          membershipActive: true
+          name: apiUser.name,
+          email: apiUser.email,
+          walletAddress: apiUser.wallet_address || walletData.address,
+          membershipPlan: apiUser.plan,
+          membershipActive: apiUser.membership_active == 1
         };
         localStorage.setItem("userData", JSON.stringify(userData));
         localStorage.setItem("auth_token", loginData.token);
